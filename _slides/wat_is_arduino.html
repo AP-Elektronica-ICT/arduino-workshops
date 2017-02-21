@@ -1,0 +1,210 @@
+---
+title: "Wat is arduino?"
+description: "Introductie in de wereld van arduinos"
+reveal:
+---
+<section>
+  <h1>Wat is arduino?</h1>
+</section>
+<section>
+  <h1>Wat is arduino?</h1>
+  <ul>
+    <h5>
+      <li class="fragment">Platform</li>
+      <li class="fragment">Boards</li>
+      <li class="fragment">Software</li>
+      <li class="fragment">Resources</li>
+    </h5>
+  </ul>
+</section>
+<section>
+  <h2>Arduino platform</h2>
+  <ul>
+    <h5>
+      <li>Snel prototypen met microcontrollers</li>
+      <li>Laagdrempelig</li>
+      <li>Makkelijk te verkrijgen</li>
+      <li>Open source</li>
+      <ul>
+        <li>Hardware</li>
+        <li>Software</li>
+      </ul>
+    </h5>  
+  </ul>
+  <img src="img/arduino_logo.png" style="float: right; width: 40%;" alt="">
+</section>
+<section>
+  <h2>Wat is een microcontroller?</h2>
+  <div style="float: left;">
+    <ul>
+      <h5>
+        <li>Rekenkracht in een klein pakketje</li>
+        <li>Integrated Circuit</li>
+        <li>Bevat meerdere componenten</li>
+        <li>Self contained</li>
+        <li>Gebruikt in embedded systemen</li>
+      </h5>
+    </ul>
+  </div>
+  <div style="float: right; width: 30%;">
+    <img src="img/atmega328p.jpg" alt="">
+  </div>
+</section>
+<section>
+  <h2>Gebruik</h2>
+  <ul>
+    <h5>
+      <li>Embedded Systemen</li>
+      <li>Spelcomputers <a href="http://www.pcworld.com/article/162588/inside_game_boy.html">(Game Boy)</a></li>
+      <li>Smartphones</li>
+      <li>Dag dagelijkse items</li>
+      <li>...</li>
+    </h5>
+  </ul>
+  <img src="img/gameboy.jpg" style="float: right; width: 40%;" alt="">
+</section>
+<section>
+  <h2>Arduino: Boards</h2>
+  <div style="display: flex; justify-content: center;">
+  <ul>
+<h5 style="width: 800px;">
+  <li>Development kits</li>
+    <li>Gebaseerd rond een microcontroller</li>
+    <li>Voorziet de nodige componenten</li>
+    <li>Boards zijn uitbreidbaar met shields</li>
+    <li>Verschillende boards met specifieke doelen.</li></h5>
+  </ul>
+  <img class= "plain" style="background: none; max-height: 400px; width: 30%;" src="img/arduino_nano_board.png" alt="">
+</section>
+<section>
+  <h2>Arduino: Uno</h2>
+  <div style="float:left; "></div>
+  <ol style="width: 45%;">
+    <li>Reset switch</li>
+    <li>USB B Connector:</li>
+    <ul>
+      <li>Connectie met PC</li>
+      <li>Voedingsbron (5V)</li>
+    </ul>
+    <li>Barrel jack:</li>
+    <ul>
+      <li>Voedingsbron</li>
+      <li>Input spanning 7V - 12V
+    </ul>
+    <li>Voltage regulator</li>
+  </ol>
+  <div style="float:right; width: 45%;">
+    <img src="img/arduino_components.png" class="plain" style="background: none;" alt="">
+  </div>
+</section>
+<section>
+  <h2>Arduino: Uno</h2>
+  <div style="float:left; "></div>
+  <ol start="5" style="width: 45%;">
+    <li>16MHz kristal</li>
+    <li>ATMega8U2</li>
+    <ul>
+      <li>Hulp microcontroller</li>
+      <li>USB naar UART bridge</li>
+    </ul>
+    <li>ATmega328p</li>
+    <ul>
+      <li>Hoofd microcontroller</li>
+      <li>8 bit mcu</li>
+      <li>AVR familie</li>
+      <li>Brein van het Arduino board</li>
+    </ul>
+  </ol>
+  <div style="float:right; width: 45%;">
+    <img src="img/arduino_components.png" class="plain" style="background: none;" alt="">
+  </div>
+</section>
+<section>
+  <h2>Arduino: Software</h2>
+  <ul>
+    <li>Beschikbaar stellen van libraries</li>
+    <li>Gebaseerd op:</li>
+    <ul>
+      <li>Wiring</li>
+      <li>Processing</li>
+      <li>avr-libc</li>
+    </ul>
+    <li>C++ Gebaseerde taal</li>
+    <li>Neemt abstractie van de hardware</li>
+    <ul>
+      <li>Code kan voor meerdere boards compileren</li>
+      <li>Werking van de microcontroller is verstopt</li>
+    </ul>
+  </ul>
+</section>
+<section>
+  <h2>Arduino: IDE</h2>
+  <h5>Installeer deze </h5>
+  <a href="https://www.arduino.cc/en/main/software">Klik hier</a></br>
+  <img src="img/arduino_ide.png" style="height: 100%;"></img>
+</section>
+<section>
+  <h2>Arduino: IDE</h2>
+  <div style="float:left; "></div>
+  <ol style="width: 45%;">
+    <li>Verify:</br>
+        Compileert de code met avr-gcc</li>
+    <li>Upload:</br>
+      Compileert de code met avr-gcc en</br>
+      upload de code met avrdude</li>
+    <li>New</li>
+    <li>Open</li>
+    <li>Save</li>
+  </ol>
+  <div style="float:right; width: 45%;">
+    <img src="img/arduino_ide_numbered.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Arduino: IDE</h2>
+  <div style="float:left; "></div>
+  <ol start=6" style="width: 45%;">
+    <li>Serial Monitor</li>
+    <li>Filename</li>
+    <li>Sketch</li>
+    <li>Statusbar</li>
+    <li>Build output</li>
+    <li>Board settings</li>
+  </ol>
+  <div style="float:right; width: 45%;">
+    <img src="img/arduino_ide_numbered.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Sketches</h2>
+  <ul>
+    <li>Sketches = Arduino programma's</li>
+    <li>Examples sketches beschikbaar in de Arduino IDE</li>
+    <li>.ino extensie</li>
+    <li>2 grote componenten</li>
+    <ul>
+      <li>Runt eenmaal<pre><code class="cpp" style="display: inline;">void setup();</code></pre></li>
+       <li>Eindeloze loop<pre><code class="cpp" style="display: inline;">void loop();</code></pre></li>
+    </ul>
+    <li><a href="https://www.arduino.cc/en/tutorial/sketch">Documentatie</a></li>
+  </ul>
+</section>
+<section>
+  <h2>Blink Sketch</h2>
+  <pre><code class="cpp">
+  void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+
+
+  void loop() {
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(1000);                       // wait for a second
+  }
+  </code></pre>
+  <h4>Try it!</h4>
+</section>
+<section>
+  <h1>Nu is het aan jullie</h1>
+</section>

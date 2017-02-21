@@ -2,7 +2,7 @@ name: jekyll-reveal
 markdown: redcarpet
 highlighter: pygments
 
-baseurl: /dops-cursus
+baseurl: /arduino-workshops
 
 collections:
   slides:

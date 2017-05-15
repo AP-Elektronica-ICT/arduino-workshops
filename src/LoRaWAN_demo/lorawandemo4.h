@@ -1,0 +1,3 @@
+const char *devAddr = "26011FF7";
+const char *nwkSKey = "61A6AC9DA6F7D128E812EEB36E93B43F";
+const char *appSKey = "F587C239F0272272DFF8C8C951A0A50B";

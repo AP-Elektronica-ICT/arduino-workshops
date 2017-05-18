@@ -1,6 +1,3 @@
-[submodule "reveal.js"]
-	path = reveal.js
-	url = https://github.com/luytsm/reveal.js
 [submodule "docs/reveal.js"]
 	path = docs/reveal.js
 	url = https://github.com/hakimel/reveal.js/

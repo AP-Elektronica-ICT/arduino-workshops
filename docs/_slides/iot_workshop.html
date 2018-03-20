@@ -21,7 +21,102 @@ reveal:
 </section>
 <section>
   <h2>Opstelling maken</h2>
-  <img style="height: 500px;" src="img/lorawan_demo_schematic.png" alt="">
+  <div style="display: flex; justify-content: space-between;">
+    <img style="height: 500px;" src="img/lorawan_demo_schematic.png" alt="">
+    <h5>
+      <ul>
+        <li>Arduino Nano</li>
+        <li>Spanningsdeler</li>
+        <ul>
+          <li>R1 = 10kΩ</li>
+          <li>R2 = 10kΩ NTC</li>
+        </ul>
+        <li>RN2483</li>
+      </ul>
+    </h5>
+  </div>
+</section>
+<section>
+  <h2>Temperatuur meten</h2>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <h4><li>Meten m.b.v. een thermistor</li></h4>
+      <ul>
+        <li>NTC weerstand (Negative Temperature Coefficient)</li>
+        <li>Weerstands daalt bij temperatuursstijging</li>
+        <ul>
+          <li>R @ -10°C ≈ 68kΩ </li>
+          <li>R @ 25°C = 10kΩ </li>
+        </ul>
+        <li>Formule voor te berkenen van temperatuurswaarde</li>
+        <ul>
+          <li>`T = B / (ln(R_(NTC)/(R_(0)*exp(-B/T_(0)))))`</li>
+        </ul>
+      </ul>
+    </ul>
+    <img class="plain" style="background: none;" src="img/ntc.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Temperatuur meten</h2>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <h4><li>Formule voor te berkenen van temperatuurswaarde</li></h4>
+      <ul>
+        <li>`T = B / (ln(R_(NTC)/(R_(0)*exp(-B/T_(0)))))`</li>
+        <li>Versimpelde versie van <a href="https://en.wikipedia.org/wiki/Steinhart%E2%80%93Hart_equation">Steinhard - Hart vergelijking</a></li>
+      </ul>
+      <h4><li>Welke waardes kennen we?</li></h4>
+      <ul>
+        <li>`B = 4300`</li>
+        <li>`R_(0) = 10000`</li>
+        <li>`T_(0) = 298.15K` (25°C)</li>
+      </ul>
+      <h4><li>Wat moeten we nog bepalen</li></h4>
+      <ul>
+        <li>`R_(NTC) = ?`</li>
+        <li>Bepalen mbv spanningsdeler</li>
+      </ul>
+    </ul>
+    <img class="plain" style="background: none;" src="img/ntc.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Temperatuur meten</h2>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <h4><li>Bepalen van weerstandswaarde</li></h4>
+      <ul>
+        <li>mbv spanningsdeler</li>
+        <ul>
+          <li>`V_(OUT) = (R2 / (R1 + R2)) * V_(IN) `</li>
+          <li>`V_(OUT) = (R_(NTC) / (R_(NTC) + 10K)) * 5V `</li>
+        </ul>
+        <li>Spanning uitlezen m.b.v. ADC</li>
+        <ul>
+          <li>`V_(OUT) = ADC * V_(REF) / 1023`</li>
+        </ul>
+        <li>Als we de twee formules samenvoegen voor het bepalen `R_(NTC)`</li>
+        <ul>
+          <li>`R_(NTC) = 10k * 1023/(ADC) - 1`</li>
+        </ul>
+      </ul>
+    </ul>
+    <img src="img/voltage_divider.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Temperatuur meten</h2>
+  <h4>Nu in code</h4>
+  <pre><code class="arduino">
+float adc_to_resistance(int adc_pin) {
+  return (VDIVIDER_R1 / (1023 / (double) analogRead(adc_pin) - 1));
+}
+
+float resistance_to_temp(float r){
+  return NTC_B_VAL / log(r / (VDIVIDER_R1 * exp(-NTC_B_VAL/T0_KELV)));
+}
+  </code></pre>
 </section>
 <section>
   <h2>LDR en NTC Data Versturen over LoRaWAN</h2>

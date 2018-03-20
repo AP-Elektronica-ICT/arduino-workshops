@@ -1,0 +1,250 @@
+[
+    {
+        "id": "f72b0301.d8a22",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "b84307c9.e587c8",
+        "type": "ttn uplink",
+        "z": "f72b0301.d8a22",
+        "name": "apotaa",
+        "app": "1f1b0c5a.fc3f14",
+        "dev_id": "dev1",
+        "field": "",
+        "x": 144,
+        "y": 185,
+        "wires": [
+            [
+                "3b1ac72d.2e41f8",
+                "78131350.812a9c",
+                "6b26dc8f.6622e4"
+            ]
+        ]
+    },
+    {
+        "id": "3b1ac72d.2e41f8",
+        "type": "function",
+        "z": "f72b0301.d8a22",
+        "name": "Get Temp",
+        "func": "\n// Create a buffer\nvar buf = new ArrayBuffer(4);\n// Create a data view of it\nvar view = new DataView(buf);\n\n// set bytes\nmsg.payload.forEach(function (b, i) {\n    view.setUint8(i, b);\n});\n\n// Read the bits as a float; note that by doing this, we're implicitly\n// converting it from a 32-bit float into JavaScript's native 64-bit double\nvar num = view.getFloat32(0, true);\n// Done\n\nmsg.payload =  num.toFixed(2)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 321,
+        "y": 341,
+        "wires": [
+            [
+                "daf9c8da.b9ecc8",
+                "f0cdd932.ebaf58"
+            ]
+        ]
+    },
+    {
+        "id": "6b26dc8f.6622e4",
+        "type": "debug",
+        "z": "f72b0301.d8a22",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 595,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "daf9c8da.b9ecc8",
+        "type": "ui_chart",
+        "z": "f72b0301.d8a22",
+        "name": "",
+        "group": "3fbd5fac.46488",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 396,
+        "y": 520,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "f0cdd932.ebaf58",
+        "type": "ui_gauge",
+        "z": "f72b0301.d8a22",
+        "name": "",
+        "group": "3fbd5fac.46488",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gauge",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "50",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b500"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 684,
+        "y": 494,
+        "wires": []
+    },
+    {
+        "id": "78131350.812a9c",
+        "type": "function",
+        "z": "f72b0301.d8a22",
+        "name": "Get RSSI",
+        "func": "msg.payload = msg.metadata.gateways[0].rssi;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 357,
+        "y": 131,
+        "wires": [
+            [
+                "84594f1b.fc08",
+                "1800496.b4c65b7"
+            ]
+        ]
+    },
+    {
+        "id": "84594f1b.fc08",
+        "type": "ui_chart",
+        "z": "f72b0301.d8a22",
+        "name": "",
+        "group": "8719f6be.4e01f8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 519,
+        "y": 94,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1800496.b4c65b7",
+        "type": "ui_gauge",
+        "z": "f72b0301.d8a22",
+        "name": "",
+        "group": "8719f6be.4e01f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gauge",
+        "label": "RSSI",
+        "format": "{{value}}",
+        "min": "-50",
+        "max": "0",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b500"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 562,
+        "y": 209,
+        "wires": []
+    },
+    {
+        "id": "1f1b0c5a.fc3f14",
+        "type": "ttn app",
+        "z": "",
+        "appId": "apotaa",
+        "accessKey": "ttn-account-v2.uLJcQ3EFC2f3ToT0RG46RPvsyJwvfv4_qVAni89IPws",
+        "discovery": "discovery.thethingsnetwork.org:1900"
+    },
+    {
+        "id": "3fbd5fac.46488",
+        "type": "ui_group",
+        "z": "",
+        "name": "Node #1",
+        "tab": "55d9e2ba.19e2bc",
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8719f6be.4e01f8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Node #1 Metadata",
+        "tab": "42fee671.e6a188",
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "55d9e2ba.19e2bc",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Temperature",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "42fee671.e6a188",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Metadata",
+        "icon": "dashboard"
+    }
+]

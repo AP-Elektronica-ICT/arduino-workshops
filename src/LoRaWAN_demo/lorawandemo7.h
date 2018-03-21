@@ -1,3 +1,0 @@
-const char *devAddr = "26011E6D";
-const char *nwkSKey = "73385D9D0AFA8CA1C7102372058CA3BE";
-const char *appSKey = "C3D9270CFFD1CBD3B03A3F2E8793E94A";

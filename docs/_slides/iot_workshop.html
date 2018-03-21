@@ -119,287 +119,261 @@ float resistance_to_temp(float r){
   </code></pre>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Infrastructuur</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>LoRaWAN Infrastructuur</h5>
   <img style="height: 500px;" src="img/lorawan_arch.jpg" alt="">
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Infrastructuur</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>LoRaWAN Infrastructuur</h5>
   <div style="display:flex; justify-content: space-around;">
-    <img src="img/rn2483-dev.png" alt="">
+    <img class="plain"style="height: 600px; background: none;" src="img/rn2483-dev.png" alt="">
     <img src="img/lorank8.jpg" alt="">
   </div>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Infrastructuur</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>The Things Network</h5>
   <div style="display:flex; justify-content: space-around;">
     <img src="img/ttn.png" alt="">
   </div>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Infrastructuur</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Node - RED Dashboard</h5>
   <div style="display:flex; justify-content: space-around;">
-    <img src="img/website.png" alt="">
+    <img src="img/node_red_ttn_dashboard_demo.png" alt="">
   </div>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Schakeling</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Node - RED Dashboard</h5>
   <div style="display:flex; justify-content: space-around;">
-    <img src="img/schakeling.png" alt="">
-    <pre><code>
-RN2xx3 -- Arduino
-Uart TX -- 10
-Uart RX -- 11
-MCLR -- 12
-Vcc -- 3.3V
-Gnd -- Gnd
+    <img src="img/node_red_ttn_wiring_demo.png" alt="">
+  </div>
+</section>
+<section>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Arduino Code</h5>
+  <pre><code class="arduino">
+#include &ltTheThingsNetwork.h&gt
+#include &ltSoftwareSerial.h&gt
+#include &ltmath.h&gt
+
+const char *appEui = "70B3D57ED000AC9A";
+const char *appKey = "8BD3AB3633D3B1EEBCB6BF5B004B6038";
+
+SoftwareSerial loraSerial(10, 11);
+#define debugSerial Serial
+
+#define freqPlan TTN_FP_EU868
+
+TheThingsNetwork ttn(loraSerial, debugSerial, freqPlan);
+
+const int RST_PIN = 4;
+const int NTC_PIN = A0;
+
+const int VDIVIDER_R1 = 9620;
+const int NTC_B_VAL = 4300;
+const float T0_KELV = 298.15;
+
+union temperature {
+  float value;
+  byte val_bytes[sizeof(double)];
+};
+
+float adc_to_resistance(int adc_pin) {
+  return (VDIVIDER_R1 / (1023 / (double) analogRead(adc_pin) - 1));
+}
+
+float resistance_to_temp(float r){
+  return NTC_B_VAL / log(r / (VDIVIDER_R1 * exp(-NTC_B_VAL/T0_KELV)));
+}
+
+
+void reset() {
+  digitalWrite(RST_PIN, LOW);
+  delay(10);
+  digitalWrite(RST_PIN, HIGH);
+}
+
+void setup()
+{
+  pinMode(RST_PIN, OUTPUT);
+  pinMode(NTC_PIN, INPUT);
+
+  digitalWrite(RST_PIN, HIGH);
+
+  loraSerial.begin(57600);
+  debugSerial.begin(9600);
+
+  while (!debugSerial && millis() < 10000);
+
+  debugSerial.println("-- STATUS");
+  reset();
+  ttn.showStatus();
+
+  debugSerial.println("-- JOIN");
+  ttn.join(appEui, appKey);
+}
+
+void loop()
+{
+  debugSerial.println("-- LOOP");
+  float r = adc_to_resistance(NTC_PIN);
+  union temperature degc;
+  degc.value = resistance_to_temp(r) - 273.15;  
+  debugSerial.println(r);
+  debugSerial.println(degc.value);
+  ttn.sendBytes(degc.val_bytes, sizeof(degc.val_bytes));
+
+  delay(5000);
+}
+  </code></pre>
+</section>
+<section>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Gebruikte Libraries</h5>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <li>Reeds geïnstalleerd</li>
+      <ul>
+        <li>SoftwareSerial: Gesimuleerde hardware</li>
+        <li>Math: Complexe wiskundige functies</li>
+      </ul>
+      <li>Nog te installeren</li>
+      <ul>
+        <li>The Things Network Node</li>
+        <li>Installeren met de library manager van Arduino</li>
+      </ul>
+    </ul>
+    <pre><code class="arduino">
+#include &ltTheThingsNetwork.h&gt
+#include &ltSoftwareSerial.h&gt
+#include &ltmath.h&gt
     </code></pre>
   </div>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Spanningsdeler</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Gebruikte variabelen</h5>
   <div style="display:flex; justify-content: space-around;">
-    <img src="img/voltage_divider.png" alt="">
-    <img style="background: white;" src="img/voltage_divider_formula.png" alt="">
+    <ul>
+      <li>OTAA LoRaWAN keys</li>
+      <li>Seriele poorten</li>
+      <li>TTN Object (wrapper voor transciever)</li>
+      <li>Gebruikte pinnen</li>
+      <li>Constante waardes voor berekeningen</li>
+      <li>Union declaratie voor data encodering</li>
+    </ul>
+    <pre><code class="arduino">
+const char *appEui = "70B3D57ED000AC9A";
+const char *appKey = "8BD3AB3633D3B1EEBCB6BF5B004B6038";
+
+SoftwareSerial loraSerial(10, 11);
+#define debugSerial Serial
+
+#define freqPlan TTN_FP_EU868
+
+TheThingsNetwork ttn(loraSerial, debugSerial, freqPlan);
+
+const int RST_PIN = 4;
+const int NTC_PIN = A0;
+
+const int VDIVIDER_R1 = 9620;
+const int NTC_B_VAL = 4300;
+const float T0_KELV = 298.15;
+
+union temperature {
+  float value;
+  byte val_bytes[sizeof(double)];
+};
+    </pre></code>
   </div>
 </section>
 <section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>De Code</h5>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Berekening van temperatuur</h5>
   <pre><code class="arduino">
-#include "lorawandemo1.h"
-#include &ltrn2xx3.h&gt
-#include &ltSoftwareSerial.h&gt
-#include &ltmath.h&gt
+float adc_to_resistance(int adc_pin) {
+  return (VDIVIDER_R1 / (1023 / (double) analogRead(adc_pin) - 1));
+}
 
-SoftwareSerial mySerial(10, 11); // RX, TX
-
-int ThermistorPin = 2;
-int Vo;
-float R1 = 1000;
-float logR2, R2, T, Tc, Tf;
-float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
-bool light = 1;
-int sensor_value;
-
-//create an instance of the rn2xx3 library,
-//giving the software serial as port to use
-rn2xx3 myLora(mySerial);
-
-// the setup routine runs once when you press reset:
+float resistance_to_temp(float r){
+  return NTC_B_VAL / log(r / (VDIVIDER_R1 * exp(-NTC_B_VAL/T0_KELV)));
+}
+  </code></pre>
+</section>
+<section>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Setup functie</h5>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <li>Standaard Arduino functie</li>
+      <li>Bij default uitgevoerd bij start up</li>
+      <li>Zorgt voor</li>
+      <ul>
+        <li>Initialisatie pinnen </li>
+        <li>Opstarten seriele communicatie</li>
+        <li>Verbinding maken met het LoRaWAN netwerk</li>
+      </ul>
+      <li>Reset functie</li>
+      <li>Reset van LoRa module</li>
+    </ul>
+    <pre><code class="arduino">
 void setup()
 {
-  // Open serial communications and wait for port to open:
-  Serial.begin(57600); //serial port to computer
-  mySerial.begin(9600); //serial port to radio
-  Serial.println("Startup");
+  pinMode(RST_PIN, OUTPUT);
+  pinMode(NTC_PIN, INPUT);
 
-  initialize_radio();
+  digitalWrite(RST_PIN, HIGH);
 
-  //transmit a startup message
-  myLora.tx("TTN Mapper on TTN Enschede node");
+  loraSerial.begin(57600);
+  debugSerial.begin(9600);
 
-  delay(2000);
+  while (!debugSerial && millis() < 10000);
+
+  debugSerial.println("-- STATUS");
+  reset();
+  ttn.showStatus();
+
+  debugSerial.println("-- JOIN");
+  ttn.join(appEui, appKey);
 }
 
-void initialize_radio()
-{
-  //reset rn2483
-  pinMode(12, OUTPUT);
-  digitalWrite(12, LOW);
-  delay(500);
-  digitalWrite(12, HIGH);
-
-  delay(100); //wait for the RN2xx3's startup message
-  mySerial.flush();
-
-  //Autobaud the rn2483 module to 9600. The default would otherwise be 57600.
-  myLora.autobaud();
-
-  //check communication with radio
-  String hweui = myLora.hweui();
-  while (hweui.length() != 16)
-  {
-    Serial.println("Communication with RN2xx3 unsuccessful. Power cycle the board.");
-    Serial.println(hweui);
-    delay(10000);
-    hweui = myLora.hweui();
-  }
-
-  //print out the HWEUI so that we can register it via ttnctl
-  Serial.println("When using OTAA, register this DevEUI: ");
-  Serial.println(myLora.hweui());
-  Serial.println("RN2xx3 firmware version:");
-  Serial.println(myLora.sysver());
-
-  //configure your keys and join the network
-  Serial.println("Trying to join TTN");
-  bool join_result = false;
-
-  //ABP: initABP(String addr, String AppSKey, String NwkSKey);
-  join_result = myLora.initABP(devAddr, appSKey, nwkSKey);
-
-  while (!join_result)
-  {
-    Serial.println("Unable to join. Are your keys correct, and do you have TTN coverage?");
-    delay(60000); //delay a minute before retry
-    join_result = myLora.init();
-  }
-  Serial.println("Successfully joined TTN");
+void reset() {
+  digitalWrite(RST_PIN, LOW);
+  delay(10);
+  digitalWrite(RST_PIN, HIGH);
 }
-
-// the loop routine runs over and over again forever:
+    </code></pre>
+  </div>
+</section>
+<section>
+  <h2>Data versturen over LoRaWAN</h2>
+  <h5>Setup functie</h5>
+  <div style="display:flex; justify-content: space-around;">
+    <ul>
+      <li>Standaard Arduino functie</li>
+      <li>Functie herhaald zich constant</li>
+      <li>Meet de temperatuur</li>
+      <li>Logt de data</li>
+      <li>Verstuurt de data</li>
+    </ul>
+    <pre><code class="arduino">
 void loop()
 {
-  measure_Temp();
-  Serial.println("TXing");
-  String data_Temp = "|TMP" + String( Tc );
-  String data_Light = "|LT." + String(light);
-  myLora.tx( data_Temp + data_Light); //one byte, blocking function
-  Serial.print(Tc);
-  Serial.println(" C");
-  delay(200);
+  debugSerial.println("-- LOOP");
+  float r = adc_to_resistance(NTC_PIN);
+  union temperature degc;
+  degc.value = resistance_to_temp(r) - 273.15;  
+  debugSerial.println(r);
+  debugSerial.println(degc.value);
+  ttn.sendBytes(degc.val_bytes, sizeof(degc.val_bytes));
+
+  delay(5000);
 }
-
-void measure_Temp()
-{
-  Vo = analogRead(ThermistorPin);
-  R2 = R1 * (1023.0 / (float)Vo - 1.0);
-  logR2 = log(R2);
-  T = (1.0 / (c1 + c2 * logR2 + c3 * logR2 * logR2 * logR2));
-  Tc = T - 273.15;
-}
-  </code></pre>
-
-</section>
-<section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Opzetten variabelen</h5>
-  <pre><code class="Arduino">
-#include "lorawandemo1.h"
-#include &ltrn2xx3.h&gt
-#include &ltSoftwareSerial.h&gt
-#include &ltmath.h&gt
-
-SoftwareSerial mySerial(10, 11); // RX, TX
-
-int ThermistorPin = 2;
-int Vo;
-float R1 = 1000;
-float logR2, R2, T, Tc, Tf;
-float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
-bool light = 1;
-int sensor_value;
-
-rn2xx3 myLora(mySerial);
-
-  </code></pre>
-
-</section>
-<section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Algemene Initialisatie</h5>
-  <pre><code class="arduino">
-void setup()
-{
-  pinMode(13, OUTPUT);
-
-  Serial.begin(57600); //serial port to computer
-  mySerial.begin(9600); //serial port to radio
-  Serial.println("Startup");
-
-  initialize_radio();
-
-  myLora.tx("TTN Mapper on TTN Enschede node");
-
-  delay(2000);
-}
-  </code></pre>
-</section>
-<section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Initialisatie Radio Module</h5>
-  <pre><code class="arduino">
-  pinMode(12, OUTPUT);
-  digitalWrite(12, LOW);
-  delay(500);
-  digitalWrite(12, HIGH);
-
-  delay(100); //wait for the RN2xx3's startup message
-  mySerial.flush();
-
-  myLora.autobaud();
-
-  String hweui = myLora.hweui();
-  while (hweui.length() != 16)
-  {
-    Serial.println("Communication with RN2xx3 unsuccessful. Power cycle the board.");
-    Serial.println(hweui);
-    delay(10000);
-    hweui = myLora.hweui();
-  }
-
-  Serial.println("When using OTAA, register this DevEUI: ");
-  Serial.println(myLora.hweui());
-  Serial.println("RN2xx3 firmware version:");
-  Serial.println(myLora.sysver());
-
-  Serial.println("Trying to join TTN");
-  bool join_result = false;
-
-  join_result = myLora.initABP(devAddr, appSKey, nwkSKey);
-
-  while (!join_result)
-  {
-    Serial.println("Unable to join. Are your keys correct, and do you have TTN coverage?");
-    delay(60000); //delay a minute before retry
-    join_result = myLora.init();
-  }
-  Serial.println("Successfully joined TTN");
-}
-  </code></pre>
-</section>
-<section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Main Loop</h5>
-  <pre><code class="Arduino">
-  void loop()
-{
-  measure_Temp();
-  Serial.println("TXing");
-  String data_Temp = "|TMP" + String( Tc );
-  String data_Light = "|LT." + String(light);
-  myLora.tx( data_Temp + data_Light); //one byte, blocking function
-  Serial.print(Tc);
-  Serial.println(" C");
-  delay(200);
-}
-  </code></pre>
-</section>
-<section>
-  <h2>LDR en NTC Data Versturen over LoRaWAN</h2>
-  <h5>Meten van de temperatuur</h5>
-  <pre><code class="Arduino">
-  void loop()
-{
-  measure_Temp();
-  Serial.println("TXing");
-  String data_Temp = "|TMP" + String( Tc );
-  String data_Light = "|LT." + String(light);
-  myLora.tx( data_Temp + data_Light); //one byte, blocking function
-  Serial.print(Tc);
-  Serial.println(" C");
-  delay(200);
-}
-  </code></pre>
-</section>
-<section>
- <h2>Nu is het aan jullie </h2>
+    </code></pre>
 </section>
 <section>
   <div>
@@ -408,6 +382,7 @@ void setup()
       <h5>
         <li>Maak de opstelling</li>
         <li>Upload de code</li>
+        <li>Update de Node RED Frontend</li>
         <li>Verstuur de data</li>
       </h5>
     </ul>
